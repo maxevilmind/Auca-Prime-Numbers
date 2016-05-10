@@ -1,0 +1,40 @@
+<html>
+  <head>
+  <script src="js/primes.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  </head>
+
+  <body>
+
+    <input name="prime" maxlength="512" id="primeUntil"/>
+    <button onclick="Count()">Count Locally</button>
+    <button onclick="CountOnServer()">Count on Server</button>
+    <script>
+
+      function CountOnServer() {
+        var jsonData = {};
+        jsonData['number'] = document.getElementById('primeUntil').value;
+
+        $.ajax({
+          url: '/count',
+          type: 'POST',
+          data: JSON.stringify(jsonData),
+          contentType: 'application/json; charset=utf-8',
+          dataType: 'json',
+          async: false,
+          success: function(msg,status,jqXHR) {
+            document.write(msg.numbers);
+            document.write("<p>Time elapsed: " + msg.timeElapsed);
+          }});
+      }
+
+      function Count(){
+        var start = new Date().getTime();
+        document.write(eratosthenes(document.getElementById('primeUntil').value));
+        var end = new Date().getTime();
+        var time = end - start;
+        document.write("<p>Time elapsed: " + time);
+      }
+    </script>
+  </body>
+</html>
